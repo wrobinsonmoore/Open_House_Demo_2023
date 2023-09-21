@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESSIBILITY_SERVICE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Open_House_Demo_2023"
+        android:lockTaskMode="if_whitelisted"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.FullScreen"
+        tools:targetApi="31">
+        <activity
+            android:name=".scatter_100_spatial"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".BarChart_4_spatial"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".BarChart_4_normal"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".LineChart_2_normal"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".GraphSelector"
+            android:exported="true" />
+        <activity
+            android:name=".shapes"
+            android:noHistory="true"
+            android:exported="true" />
+        <activity
+            android:name=".screen_1"
+            android:noHistory="true"
+            android:exported="false" />
+        <activity
+            android:name=".participant"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
