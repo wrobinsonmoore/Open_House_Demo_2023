@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -52,7 +50,7 @@ public class GraphSelector extends AppCompatActivity {
             public void onClick(View v) {
                 
                 // Move to the next activity
-                Intent next_activity = new Intent(GraphSelector.this, LineChart_2_normal.class);
+                Intent next_activity = new Intent(GraphSelector.this, LineChart_2_spatial.class);
                 startActivity(next_activity);
             }
         });
@@ -77,20 +75,6 @@ public class GraphSelector extends AppCompatActivity {
                 // Move to the next activity
                 Intent next_activity = new Intent(GraphSelector.this, scatter_100_spatial.class);
                 startActivity(next_activity);
-            }
-        });
-
-
-        /**************************************************************************************
-         * NAVIGATION BUTTONS
-         **************************************************************************************/
-        Button back_button = findViewById(R.id.back);
-        back_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Go Back to Participant Activity
-                Intent back = new Intent(GraphSelector.this, participant.class);
-                startActivity(back);
             }
         });
 

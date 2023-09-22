@@ -31,23 +31,12 @@
             android:noHistory="true"
             android:exported="false" />
         <activity
-            android:name=".LineChart_2_normal"
+            android:name=".LineChart_2_spatial"
             android:noHistory="true"
             android:exported="false" />
         <activity
             android:name=".GraphSelector"
-            android:exported="true" />
-        <activity
-            android:name=".shapes"
-            android:noHistory="true"
-            android:exported="true" />
-        <activity
-            android:name=".screen_1"
-            android:noHistory="true"
-            android:exported="false" />
-        <activity
-            android:name=".participant"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -61,14 +61,14 @@ public class BarChart_4_normal extends AppCompatActivity {
     int screen_height = Resources.getSystem().getDisplayMetrics().heightPixels;
 
     // Define area colors
-    int inside_red = 222;
-    int inside_green = 131;
-    int inside_blue = 68;
+    int inside_red = 237;
+    int inside_green = 125;
+    int inside_blue = 49;
 
     // Define area colors for TOP BAR
-    int top_bar_red = 79;
-    int top_bar_green = 113;
-    int top_bar_blue = 190;
+    int top_bar_red = 0;
+    int top_bar_green = 112;
+    int top_bar_blue = 192;
 
     // For Vibration Control
     VibrationManager vib = new VibrationManager();
@@ -104,28 +104,12 @@ public class BarChart_4_normal extends AppCompatActivity {
     float pitch_threshold = (float) 0.01;
 
 
-    // For Logging Info
-    int logger_delay = 100; //Logger Delay in ms
-    String participant_number;
-    String TAG = "BarChart_4_normal";
-    String file_name;
-    FileWriter writer;
-    Boolean writer_active = true;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Specify which layout this activity uses
         setContentView(R.layout.barchart_4_normal);
-
-        /**************************************************************************************
-         * GET THE PARTICIPANT NUMBER AND FILE NAME
-         **************************************************************************************/
-        SharedPreferences sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        participant_number = sharedPref.getString("participant_number", "yeeted");
-        file_name = participant_number + "_" + TAG + ".csv";
 
         /**************************************************************************************
          * SET THE BACKGROUND IMAGE FOR EACH ORIENTATION
@@ -136,10 +120,10 @@ public class BarChart_4_normal extends AppCompatActivity {
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             // In landscape
-            mv.setImageResource(R.drawable.histo_10_normal_blue);
+            mv.setImageResource(R.drawable.bar_chart_1);
         } else {
             // In portrait
-            mv.setImageResource(R.drawable.histo_10_normal_blue);
+            mv.setImageResource(R.drawable.bar_chart_1);
         }
 
         /**************************************************************************************
@@ -188,7 +172,6 @@ public class BarChart_4_normal extends AppCompatActivity {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        final TextView grtv = findViewById(R.id.gestureResultTextView); // Initiate the GestureResultTextView object
 
         sfg.setDebug(false);
         sfg.setConsumeTouchEvents(true);
@@ -196,7 +179,6 @@ public class BarChart_4_normal extends AppCompatActivity {
         sfg.setOnFingerGestureListener(new SimpleFingerGestures_Mod.OnFingerGestureListener() {
             @Override
             public boolean onSwipeUp(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped up with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping UP with one finger
                 }
@@ -214,17 +196,6 @@ public class BarChart_4_normal extends AppCompatActivity {
                     soundPool.unload(empty_sound_id);
                     vib.stop();
 
-                    // Close the FileWriter
-                    try {
-                        if (writer_active) {
-                            writer_active = false;
-                            writer.close();
-                        }
-                    }
-                    catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
                     // Go back to GraphSelector
                     Intent back_to_graph_selector = new Intent(BarChart_4_normal.this, GraphSelector.class);
                     startActivity(back_to_graph_selector);
@@ -237,7 +208,6 @@ public class BarChart_4_normal extends AppCompatActivity {
 
             @Override
             public boolean onSwipeDown(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped down with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping DOWN with one finger
                 }
@@ -255,7 +225,6 @@ public class BarChart_4_normal extends AppCompatActivity {
 
             @Override
             public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped left with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping LEFT with one finger
                 }
@@ -273,7 +242,6 @@ public class BarChart_4_normal extends AppCompatActivity {
 
             @Override
             public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped right with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping RIGHT with one finger
                 }
@@ -305,7 +273,6 @@ public class BarChart_4_normal extends AppCompatActivity {
 
             @Override
             public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You unpinched " + fingers + " fingers.");
                 if (fingers == 2) {
                     // Write your code here for PINCHING with 2 fingers
                 }
@@ -337,13 +304,6 @@ public class BarChart_4_normal extends AppCompatActivity {
         // Now for the code to be executed constantly during the duration of this activity
         monitor(mv, coord_view, output_view);
 
-        // Log the required information, by getting the number from the participant activity
-        try {
-            logger(file_name);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     /**************************************************************************************
@@ -361,7 +321,7 @@ public class BarChart_4_normal extends AppCompatActivity {
         empty_sound_id = soundPool.load(this, R.raw.waves_trim, 1);
 
         bells_sound_id = soundPool.load(this, R.raw.bells_sound, 1);
-        healing_sound_id = soundPool.load(this, R.raw.healing_sound, 1);
+        healing_sound_id = soundPool.load(this, R.raw.waves_trim, 1);
 
         // Write your constantly running code here
         handler.post(new Runnable() {
@@ -474,7 +434,9 @@ public class BarChart_4_normal extends AppCompatActivity {
                         int pixel_red = Color.red(pixel);
                         int pixel_green = Color.green(pixel);
                         int pixel_blue = Color.blue(pixel);
-                        // coord_view.setText("COLOR = " + pixel_red + ", " + pixel_green + "," + pixel_blue);
+
+                        // Uncomment this to find out which color is under the finger!
+//                        coord_view.setText("COLOR = " + pixel_red + ", " + pixel_green + "," + pixel_blue);
 
 
                         // For AUDIO CHANNEL proportional control based on X axis coordinate
@@ -512,6 +474,13 @@ public class BarChart_4_normal extends AppCompatActivity {
                                 healing_sound_is_playing = true;
                             }
 
+                            // SPATIAL AUDIO constant modification
+                            if (spatial_audio_activated) {
+                                soundPool.setLoop(healing_sound_stream_id, loop);
+                                soundPool.setVolume(healing_sound_stream_id, leftVolume, rightVolume);
+                                soundPool.setRate(healing_sound_stream_id, pitch);
+                            }
+
 
                             // Start vibrating
                             if (vib_freq != vib_freq_inside) {
@@ -538,8 +507,6 @@ public class BarChart_4_normal extends AppCompatActivity {
 
                             soundPool.stop(healing_sound_stream_id);
                             healing_sound_is_playing = false;
-
-                            coord_view.setText("TOP BAR FOUND");
 
                             // play sound on top bar
                             if (!bells_sound_is_playing) {
@@ -860,75 +827,4 @@ public class BarChart_4_normal extends AppCompatActivity {
             }
         });
     }
-
-    /**************************************************************************************
-     * LOGGER CODE
-     **************************************************************************************/
-    public void logger(String file_name) throws IOException {
-        final Handler handler = new Handler();
-
-        /**************************************************************************************
-         * LOGGER CONFIGURATION
-         **************************************************************************************/
-        // Set the file paths, delay, and timestamp format
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS); //Point to the Documents folder
-        File output_file_dir = new File(path + "/SOAR_2023/"); // Folder where CSV file will be saved inside the Documents folder
-        File output_file = new File(output_file_dir, file_name); //Point to the output file
-        String header = "time,x0,x1,x2,x3,x4,y0,y1,y2,y3,y4\n"; // header for CSV file
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS"); // Set the date for later constant updating
-
-        // Make the output directory in case it does not exist yet, and write the header for the file
-        if (!output_file_dir.exists()) {
-            output_file_dir.mkdir();
-        }
-
-        // Initiate the FileWriter
-        writer = new FileWriter(output_file);
-
-        // Write the header for the file
-        try{
-            writer.append(header);
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                // Write your constantly running code here
-
-                /**************************************************************************************
-                 * OUTPUT FILE CONFIGURATION
-                 **************************************************************************************/
-                //Ask for permission to manage External Storage
-                if (ContextCompat.checkSelfPermission(BarChart_4_normal.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(BarChart_4_normal.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-                }
-                else {
-                    // Permission has already been granted
-                    // Get the current time
-                    String current_time = sdf.format(new Date());
-
-                    // Write the time + finger coordinates to the file and remove the square brackets
-                    String file_content = current_time + "," + Arrays.toString(sfg.X_coords).replace("[", "").replace("]", "")
-                            + "," + Arrays.toString(sfg.Y_coords).replace("[", "").replace("]", "") + "\n";
-                    try {
-                        if (writer_active) { // This section will always be accessed UNTIL the gesture for leaving the activity is called!
-                            writer.append(file_content);
-                            writer.flush();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                handler.postDelayed(this, logger_delay);
-            }
-        };
-        // Start the Runnable
-        handler.post(runnable);
-    }
-
 }

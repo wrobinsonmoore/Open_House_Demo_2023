@@ -67,35 +67,6 @@
         android:importantForAccessibility="yes"/>
 
     <TextView
-        android:id="@+id/gestureResultTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text=""
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_orange_dark"
-        app:layout_constraintTop_toTopOf="@id/hor_guide_bottom1"
-        app:layout_constraintBottom_toTopOf="@id/hor_guide_bottom2"
-        app:layout_constraintStart_toStartOf="@id/ver_guide_left2"
-        app:layout_constraintEnd_toEndOf="@id/ver_guide_right1"
-        android:importantForAccessibility="no"/>
-
-    <TextView
-        android:id="@+id/gestureResultTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:textAlignment="center"
-        android:text=""
-        android:textColor="@android:color/holo_orange_dark"
-        app:layout_constraintTop_toTopOf="@id/hor_guide_bottom1"
-        app:layout_constraintStart_toStartOf="@id/ver_guide_left2"
-        app:layout_constraintEnd_toEndOf="@id/ver_guide_right1"
-        android:importantForAccessibility="no"/>
-
-    <TextView
         android:id="@+id/coordinate_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

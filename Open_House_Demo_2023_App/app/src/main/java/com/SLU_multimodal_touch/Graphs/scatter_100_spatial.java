@@ -91,28 +91,12 @@ public class scatter_100_spatial extends AppCompatActivity {
     float pitch_threshold = (float) 0.01;
 
 
-    // For Logging Info
-    int logger_delay = 100; //Logger Delay in ms
-    String participant_number;
-    String TAG = "scatter_100_spatial";
-    String file_name;
-    FileWriter writer;
-    Boolean writer_active = true;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Specify which layout this activity uses
         setContentView(R.layout.scatter_100_spatial);
-
-        /**************************************************************************************
-         * GET THE PARTICIPANT NUMBER AND FILE NAME
-         **************************************************************************************/
-        SharedPreferences sharedPref = getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        participant_number = sharedPref.getString("participant_number", "yeeted");
-        file_name = participant_number + "_" + TAG + ".csv";
 
         /**************************************************************************************
          * SET THE BACKGROUND IMAGE FOR EACH ORIENTATION
@@ -175,7 +159,6 @@ public class scatter_100_spatial extends AppCompatActivity {
         display.getSize(size);
         int width = size.x;
         int height = size.y;
-        final TextView grtv = findViewById(R.id.gestureResultTextView); // Initiate the GestureResultTextView object
 
         sfg.setDebug(false);
         sfg.setConsumeTouchEvents(true);
@@ -183,7 +166,6 @@ public class scatter_100_spatial extends AppCompatActivity {
         sfg.setOnFingerGestureListener(new SimpleFingerGestures_Mod.OnFingerGestureListener() {
             @Override
             public boolean onSwipeUp(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped up with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping UP with one finger
                 }
@@ -201,17 +183,6 @@ public class scatter_100_spatial extends AppCompatActivity {
                     soundPool.unload(empty_sound_id);
                     vib.stop();
 
-                    // Close the FileWriter
-                    try {
-                        if (writer_active) {
-                            writer_active = false;
-                            writer.close();
-                        }
-                    }
-                    catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-
                     // Go back to GraphSelector
                     Intent back_to_graph_selector = new Intent(scatter_100_spatial.this, GraphSelector.class);
                     startActivity(back_to_graph_selector);
@@ -224,7 +195,6 @@ public class scatter_100_spatial extends AppCompatActivity {
 
             @Override
             public boolean onSwipeDown(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped down with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping DOWN with one finger
                 }
@@ -242,7 +212,6 @@ public class scatter_100_spatial extends AppCompatActivity {
 
             @Override
             public boolean onSwipeLeft(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped left with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping LEFT with one finger
                 }
@@ -260,7 +229,6 @@ public class scatter_100_spatial extends AppCompatActivity {
 
             @Override
             public boolean onSwipeRight(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You swiped right with " + fingers + " finger(s).");
                 if (fingers == 1) {
                     //Write your code here for swiping RIGHT with one finger
                 }
@@ -293,7 +261,6 @@ public class scatter_100_spatial extends AppCompatActivity {
 
             @Override
             public boolean onUnpinch(int fingers, long gestureDuration, double gestureDistance) {
-//                grtv.setText("You unpinched " + fingers + " fingers.");
                 if (fingers == 2) {
                     // Write your code here for PINCHING with 2 fingers
                 }
@@ -325,13 +292,6 @@ public class scatter_100_spatial extends AppCompatActivity {
         // Now for the code to be executed constantly during the duration of this activity
         monitor(mv, coord_view, output_view);
 
-        // Log the required information, by getting the number from the participant activity
-        try {
-            logger(file_name);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     /**************************************************************************************
@@ -348,7 +308,7 @@ public class scatter_100_spatial extends AppCompatActivity {
         soundPool = new SoundPool(10,AudioManager.STREAM_MUSIC, 0);
         empty_sound_id = soundPool.load(this, R.raw.waves_trim, 1);
 
-        healing_sound_id = soundPool.load(this, R.raw.healing_sound, 1);
+        healing_sound_id = soundPool.load(this, R.raw.waves_trim, 1);
 
         // Write your constantly running code here
         handler.post(new Runnable() {
@@ -489,6 +449,13 @@ public class scatter_100_spatial extends AppCompatActivity {
                                     healing_sound_stream_id = soundPool.play(healing_sound_id, leftVolume, rightVolume, priority, healing_loop, pitch);
                                 }
                                 healing_sound_is_playing = true;
+                            }
+
+                            // SPATIAL AUDIO constant modification
+                            if (spatial_audio_activated) {
+                                soundPool.setLoop(healing_sound_stream_id, loop);
+                                soundPool.setVolume(healing_sound_stream_id, leftVolume, rightVolume);
+                                soundPool.setRate(healing_sound_stream_id, pitch);
                             }
 
                             // Start vibrating
@@ -793,75 +760,4 @@ public class scatter_100_spatial extends AppCompatActivity {
             }
         });
     }
-
-    /**************************************************************************************
-     * LOGGER CODE
-     **************************************************************************************/
-    public void logger(String file_name) throws IOException {
-        final Handler handler = new Handler();
-
-        /**************************************************************************************
-         * LOGGER CONFIGURATION
-         **************************************************************************************/
-        // Set the file paths, delay, and timestamp format
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS); //Point to the Documents folder
-        File output_file_dir = new File(path + "/SOAR_2023/"); // Folder where CSV file will be saved inside the Documents folder
-        File output_file = new File(output_file_dir, file_name); //Point to the output file
-        String header = "time,x0,x1,x2,x3,x4,y0,y1,y2,y3,y4\n"; // header for CSV file
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS"); // Set the date for later constant updating
-
-        // Make the output directory in case it does not exist yet, and write the header for the file
-        if (!output_file_dir.exists()) {
-            output_file_dir.mkdir();
-        }
-
-        // Initiate the FileWriter
-        writer = new FileWriter(output_file);
-
-        // Write the header for the file
-        try{
-            writer.append(header);
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                // Write your constantly running code here
-
-                /**************************************************************************************
-                 * OUTPUT FILE CONFIGURATION
-                 **************************************************************************************/
-                //Ask for permission to manage External Storage
-                if (ContextCompat.checkSelfPermission(scatter_100_spatial.this,Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(scatter_100_spatial.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-                }
-                else {
-                    // Permission has already been granted
-                    // Get the current time
-                    String current_time = sdf.format(new Date());
-
-                    // Write the time + finger coordinates to the file and remove the square brackets
-                    String file_content = current_time + "," + Arrays.toString(sfg.X_coords).replace("[", "").replace("]", "")
-                            + "," + Arrays.toString(sfg.Y_coords).replace("[", "").replace("]", "") + "\n";
-                    try {
-                        if (writer_active) { // This section will always be accessed UNTIL the gesture for leaving the activity is called!
-                            writer.append(file_content);
-                            writer.flush();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                handler.postDelayed(this, logger_delay);
-            }
-        };
-        // Start the Runnable
-        handler.post(runnable);
-    }
-
 }

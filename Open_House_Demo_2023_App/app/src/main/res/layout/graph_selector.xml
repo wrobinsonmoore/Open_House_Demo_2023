@@ -180,7 +180,7 @@
         app:layout_constraintRight_toRightOf="@id/ver5"
         app:layout_constraintTop_toTopOf="@id/hor6"
         app:layout_constraintBottom_toBottomOf="@id/hor7"
-        android:text="Line Chart: 2 Vib, Normal"
+        android:text="Line Chart: 2 Vib, Spatial"
         android:textAlignment="center"
         />
 
@@ -206,17 +206,4 @@
         android:text="Scatter: 100 pts, Spatial"
         android:textAlignment="center"
         />
-
-
-    <Button
-        android:id="@+id/back"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@id/hor9"
-        app:layout_constraintLeft_toLeftOf="@id/ver4"
-        app:layout_constraintRight_toRightOf="@id/ver6"
-        app:layout_constraintTop_toTopOf="@id/hor8" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
