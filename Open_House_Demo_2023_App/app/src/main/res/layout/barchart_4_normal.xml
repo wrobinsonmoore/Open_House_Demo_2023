@@ -49,7 +49,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:importantForAccessibility="no"
-        android:text="Shape Tracing"
+        android:text="Open House 2023 Demo"
         android:textAlignment="center"
         android:textColor="@android:color/holo_purple"
         android:translationZ="1dp"
